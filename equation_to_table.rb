@@ -32,8 +32,13 @@ class EquationToTable
       evaluate_equation(eq.last)
     end
 
-    table 
-    terms.each 
+    table = ["%s %s" % [inputs * '', outputs * '']]
+    terms = terms.transpose.map(&:join)
+
+    0.upto(2 ** num_inputs - 1).map do |index|
+      table << ("%0#{num_inputs}d %s" % [index.to_s(2).to_i, terms[index]])
+    end
+    table
   end
 
   def evaluate_equation(eq)

@@ -72,6 +72,9 @@ describe EquationToTable do
 
       eq = described_class.new(["a = a ^ b"])
       eq.evaluate_equation("a ^ b").should ==  ["0", "1", "1", "0"]
+
+      eq = described_class.new(["a = a ^ b ^ c"])
+      eq.evaluate_equation("a ^ b ^ c").should ==  ["0", "1", "1", "0", "1", "0", "0", "1"]
     end
   end
 
