@@ -1,7 +1,7 @@
 PATH
   remote: /home/mmh/src/quantum/qu_function
   specs:
-    qu_function (0.0.3)
+    qu_function (0.0.5)
       activemodel
       activesupport
       liquid
