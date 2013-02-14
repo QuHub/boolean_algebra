@@ -8,7 +8,7 @@ class EquationToTable
   def inputs
     @inputs ||= begin
       equations.map do |_,eq|
-        eq.gsub(/[^a-zA-Z]/, '').split('')
+        eq.gsub(/[^a-zA-Z0-9]/, ' ').split(' ')
       end
     end.flatten.uniq.sort
   end
@@ -44,7 +44,8 @@ class EquationToTable
   def evaluate_equation(eq)
     0.upto(2 ** num_inputs - 1).map do |index|
       assign(index)
-      eval(eq.gsub(/([a-zAZ])/, '@\1')).to_s
+      # bitwise AND the result with 1 to remove the 2's complement resulting from NOT terms in the equation
+      eval("%s & 1" % eq.gsub(/([a-zAZ])/, '@\1')).to_s  
     end
   end
 
@@ -56,5 +57,4 @@ class EquationToTable
       term >>= 1
     end
   end
-
 end

@@ -21,12 +21,12 @@ describe EquationToTable do
 
     it "figures out the input variables from two equations"  do
       eq = described_class.new(["a = a & b", "d = a & cd"]) 
-      eq.inputs.should == %w(a b c d)
+      eq.inputs.should == %w(a b cd)
     end
 
     it "sorts input variables from two equations"  do
       eq = described_class.new(["a = da & b", "d = a & c"]) 
-      eq.inputs.should == %w(a b c d)
+      eq.inputs.should == %w(a b c da)
     end
   end
 
@@ -75,6 +75,22 @@ describe EquationToTable do
 
       eq = described_class.new(["a = a ^ b ^ c"])
       eq.evaluate_equation("a ^ b ^ c").should ==  ["0", "1", "1", "0", "1", "0", "0", "1"]
+    end
+
+    it "handles long variable names" do
+      eq = described_class.new(["a1 = a1 ^ a2 ^ a3"])
+      eq.evaluate_equation("a1 ^ a2 ^ a3").should ==  ["0", "1", "1", "0", "1", "0", "0", "1"]
+    end
+
+    it "handles bitwise not properly" do
+      eq = described_class.new(["a = a ^ ~b"])
+      eq.evaluate_equation("a ^ ~b").should ==  ["1", "0", "0", "1"]
+
+      eq = described_class.new(["a = ~b"])
+      eq.evaluate_equation("~b").should ==  ["1", "0"]
+
+      eq = described_class.new(["a = a & ~(b ^ c)"])
+      eq.evaluate_equation("a & ~(b ^ c)").should ==  ["0", "0", "0", "0", "1", "0", "0", "1"]
     end
   end
 
